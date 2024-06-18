@@ -70,12 +70,37 @@
   display: flex;
 }
 
+.card-body .date {
+  display: block;
+  font-size: 14px;
+  color: #9c9c9c;
+}
 .card-body .card-text {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+.card-body .ccy-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.card-body .ccy-list .ccy-list-item {
+  display: block;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+.card-body .ccy-list .ccy-list-item .ccy-name {
+  font-weight: 600;
+  font-size: 18px;
+}
+.card-body .ccy-list .ccy-list-item .ccy-item {
+  display: block;
+}
+.card-body .ccy-list .ccy-list-item .ccy-item span {
+  font-weight: 600;
 }
 
 /*# sourceMappingURL=app.css.map */

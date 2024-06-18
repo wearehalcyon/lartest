@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\RequestException;
 
 class ExchangeRatesController extends Controller
 {
+    // Echange rates page
     public function index()
     {
         try {

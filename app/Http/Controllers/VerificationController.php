@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 class VerificationController extends Controller
 {
 
+    // Verification
     public function verify(EmailVerificationRequest $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
@@ -23,7 +24,7 @@ class VerificationController extends Controller
         return redirect()->route('home')->with('verified', true);
     }
 
-
+    // Resend verification
     public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {

@@ -11,11 +11,13 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    // Reg form
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
+    // Register action
     public function register(Request $request)
     {
         $request->validate([
@@ -40,6 +42,7 @@ class AuthController extends Controller
         return redirect()->route('login')->with('status', 'We sent you an activation code. Check your email.');
     }
 
+    // Verification action
     public function verify($token)
     {
         $user = User::where('verification_token', $token)->firstOrFail();
@@ -50,11 +53,13 @@ class AuthController extends Controller
         return redirect()->route('login')->with('status', 'Your email is verified. You can now login.');
     }
 
+    // Login form
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
+    // Login action
     public function login(Request $request)
     {
         $request->validate([
@@ -72,6 +77,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // Logout action
     public function logout(Request $request)
     {
         Auth::logout();

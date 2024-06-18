@@ -21,6 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// User login and register routes
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
@@ -30,9 +31,13 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Posts route
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+
+// Exchange rates route
 Route::get('/exchange-rates', [ExchangeRatesController::class, 'index'])->name('exchange.index');
 
+// Authorized accessed routes
 Route::middleware(['auth', 'session.timeout'])->group(function () {
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}', [PostController::class, 'edit'])->name('posts.edit');

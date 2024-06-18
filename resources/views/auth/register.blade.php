@@ -7,12 +7,27 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
         <a class="navbar-brand" href="{{ url('/') }}">Home</a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="{{ route('login') }}">Login</a>
-                <a class="nav-item nav-link active" href="{{ route('register') }}">Register</a>
-                <a class="nav-item nav-link active" href="{{ route('posts.index') }}">Posts</a>
-            </div>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
+                </li>
+                @if(!Auth::user())
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('register') }}">Register</a>
+                    </li>
+                @else
+                    <li class="nav-item active">
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button type="submit" class="nav-link" href="{{ route('logout') }}">Logout</button>
+                        </form>
+                    </li>
+                @endif
+            </ul>
         </div>
     </nav>
     <div class="container mt-5">

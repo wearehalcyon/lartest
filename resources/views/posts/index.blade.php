@@ -3,19 +3,46 @@
 <head>
     <title>Posts</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
         <a class="navbar-brand" href="{{ url('/') }}">Home</a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="{{ route('login') }}">Login</a>
-                <a class="nav-item nav-link active" href="{{ route('register') }}">Register</a>
-                <a class="nav-item nav-link active" href="{{ route('posts.index') }}">Posts</a>
-            </div>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
+                </li>
+                @if(!Auth::user())
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('register') }}">Register</a>
+                    </li>
+                @else
+                    <li class="nav-item active">
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button type="submit" class="nav-link" href="{{ route('logout') }}">Logout</button>
+                        </form>
+                    </li>
+                @endif
+            </ul>
         </div>
     </nav>
 
+    @if(session('updated'))
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success" role="alert">
+                        {{ session('updated') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     @if(session('deleted'))
         <div class="container mt-5">
             <div class="row">
@@ -52,15 +79,16 @@
 
     @if($posts->isNotEmpty())
         <div class="container mt-5">
-            <h2>Posts</h2>
+            <h2>Posts ({{ $posts->count() }})</h2>
             <div class="row">
                 @foreach($posts as $post)
                     <div class="col-md-12 col-lg-6 col-xl-4 mb-4">
                         <div class="card" style="height: 100%;">
-                            <div class="card-body">
+                            <div class="card-body" data-post="{{ $post->id }}">
+                                <p>{{ '#' . $post->id }}</p>
                                 <h5 class="card-title">{{ $post->title }}</h5>
                                 <p class="card-text">{{ $post->content }}</p>
-                                <a href="#" class="btn btn-success">Edit</a>
+                                <a href="#" class="btn btn-success edit" data-id="{{ $post->id }}" data-action="{{ route('posts.update', $post->id) }}">Edit</a>
                                 <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger confirm">Delete</a>
                             </div>
                         </div>
@@ -85,8 +113,29 @@
             <button type="submit">Update Post</button>
         </form>
     </div>
+
+    <div class="edit-post-popup">
+        <div class="card p-3 edit-post-window">
+            <div class="close-popup">
+                <button class="btn-close" type="button">✕</button>
+            </div>
+            <form id="postEditForm" method="POST" action="">
+                @csrf
+                <div>
+                    <label>Title</label>
+                    <input class="form-control" type="text" name="title" required>
+                </div>
+                <div>
+                    <label>Content</label>
+                    <textarea class="form-control" rows="10" name="content" required></textarea>
+                </div>
+                <button class="btn btn-primary mt-3" type="submit">Update Post</button>
+            </form>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets/js/edit-post.js') }}"></script>
     <script>
         $(document).ready(function($){
             let confirmBtn = $('.confirm');

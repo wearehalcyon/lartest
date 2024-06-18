@@ -9,7 +9,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('created_at', 'DESC')->get();
         return view('posts.index', compact('posts'));
     }
 
@@ -46,7 +46,7 @@ class PostController extends Controller
             'content' => $request->content,
         ]);
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('updated', 'Post card was updated successfully!');
     }
 
     public function destroy(Post $post)

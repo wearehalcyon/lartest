@@ -16,6 +16,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('exchange.index') }}">Exchange Rates</a>
+                </li>
                 @if(!Auth::check())
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
@@ -38,7 +41,8 @@
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-5 col-xl-4">
                 <div class="card p-3">
-                    123
+                    <a class="btn btn-light mt-1" href="{{ route('posts.index') }}">Posts</a>
+                    <a class="btn btn-light mt-1" href="{{ route('exchange.index') }}">Exchange Rates</a>
                 </div>
             </div>
         </div>

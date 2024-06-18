@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Posts</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
@@ -10,18 +14,21 @@
         <a class="navbar-brand" href="{{ url('/') }}">Home</a>
         <div class="collapse navbar-collapse justify-content-between" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('exchange.index') }}">Exchange Rates</a>
+                </li>
                 @if(!Auth::check())
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('register') }}">Register</a>
                     </li>
                 @else
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <button type="submit" class="nav-link" href="{{ route('logout') }}">Logout</button>
@@ -77,11 +84,21 @@
                 </div>
             </div>
         </div>
+    @else
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-5 col-xl-4">
+                    <div class="card d-block p-3">
+                        To create or edit/delete post - please <a href="{{ route('login') }}">Login</a> into your account.
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 
     @if($posts->isNotEmpty())
         <div class="container mt-5 mb-5">
-            <h2>Posts ({{ $posts->count() }})</h2>
+            <h2>Posts ({{ $postsAll->count() }})</h2>
             <div class="row">
                 @foreach($posts as $post)
                     <div class="col-md-12 col-lg-6 col-xl-4 mb-4">
@@ -91,8 +108,10 @@
                                 <h5 class="card-title">{{ $post->title }}</h5>
                                 <p class="card-text">{{ $post->content }}</p>
                                 <a href="#" class="btn btn-primary view" data-id="{{ $post->id }}">View</a>
-                                <a href="#" class="btn btn-success edit" data-id="{{ $post->id }}" data-action="{{ route('posts.update', $post->id) }}">Edit</a>
-                                <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger confirm">Delete</a>
+                                @if(Auth::check())
+                                    <a href="#" class="btn btn-success edit" data-id="{{ $post->id }}" data-action="{{ route('posts.update', $post->id) }}">Edit</a>
+                                    <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger confirm">Delete</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -102,55 +121,56 @@
         </div>
     @endif
 
-    <div id="editModal" style="display:none;">
-        <form id="editForm" method="POST">
-            @csrf
-            @method('PUT')
-            <div>
-                <label>Title</label>
-                <input type="text" name="title" id="editTitle" required>
-            </div>
-            <div>
-                <label>Content</label>
-                <textarea name="content" id="editContent" required></textarea>
-            </div>
-            <button type="submit">Update Post</button>
-        </form>
-    </div>
-
-    <div class="edit-post-popup">
-        <div class="card p-3 edit-post-window">
+    <div class="view-post-popup">
+        <div class="card py-3 px-5 view-post-window">
             <div class="close-popup">
                 <button class="btn-close" type="button"></button>
             </div>
-            <form id="postEditForm" method="POST" action="">
-                @csrf
-                <div>
-                    <label>Title</label>
-                    <input class="form-control" type="text" name="title" required>
-                </div>
-                <div>
-                    <label>Content</label>
-                    <textarea class="form-control" rows="10" name="content" required></textarea>
-                </div>
-                <button class="btn btn-primary mt-3" type="submit">Update Post</button>
-            </form>
+            <div class="post-data">
+                <h2 class="title"></h2>
+                <p class="content"></p>
+            </div>
         </div>
     </div>
+
+    @if(Auth::check())
+        <div class="edit-post-popup">
+            <div class="card p-3 edit-post-window">
+                <div class="close-popup">
+                    <button class="btn-close" type="button"></button>
+                </div>
+                <form id="postEditForm" method="POST" action="">
+                    @csrf
+                    <div>
+                        <label>Title</label>
+                        <input class="form-control" type="text" name="title" required>
+                    </div>
+                    <div>
+                        <label>Content</label>
+                        <textarea class="form-control" rows="10" name="content" required></textarea>
+                    </div>
+                    <button class="btn btn-primary mt-3" type="submit">Update Post</button>
+                </form>
+            </div>
+        </div>
+    @endif
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="{{ asset('assets/js/edit-post.js') }}"></script>
-    <script>
-        $(document).ready(function($){
-            let confirmBtn = $('.confirm');
+    <script src="{{ asset('assets/js/view-post.js') }}"></script>
+    @if(Auth::check())
+        <script src="{{ asset('assets/js/edit-post.js') }}"></script>
+        <script>
+            $(document).ready(function($){
+                let confirmBtn = $('.confirm');
 
-            confirmBtn.on('click', function(){
-                if (confirm("Are you sure you want to delete this post card?") == true) {
-                    return true;
-                }
-                return false;
+                confirmBtn.on('click', function(){
+                    if (confirm("Are you sure you want to delete this post card?") == true) {
+                        return true;
+                    }
+                    return false;
+                });
             });
-        });
-    </script>
+        </script>
+    @endif
 </body>
 </html>

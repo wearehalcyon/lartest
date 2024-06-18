@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\ExchangeRatesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
@@ -29,11 +30,10 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::prefix('/')->group(function () {
-    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-});
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/exchange-rates', [ExchangeRatesController::class, 'index'])->name('exchange.index');
 
-Route::prefix('/')->group(function () {
+Route::middleware(['auth', 'session.timeout'])->group(function () {
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}', [PostController::class, 'edit'])->name('posts.edit');
     Route::post('/posts/{post}', [PostController::class, 'update'])->name('posts.update');

@@ -16,11 +16,23 @@
         </div>
     </nav>
 
+    @if(session('deleted'))
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success" role="alert">
+                        {{ session('deleted') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-5 col-xl-4">
                 <div class="card p-3">
-                    <h1>Posts</h1>
+                    <h1>Create Post</h1>
                     <form id="postForm" method="POST" action="{{ route('posts.store') }}">
                         @csrf
                         <div>
@@ -43,13 +55,13 @@
             <h2>Posts</h2>
             <div class="row">
                 @foreach($posts as $post)
-                    <div class="col-md-12 col-lg-6 col-xl-4">
+                    <div class="col-md-12 col-lg-6 col-xl-4 mb-4">
                         <div class="card" style="height: 100%;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $post->title }}</h5>
                                 <p class="card-text">{{ $post->content }}</p>
                                 <a href="#" class="btn btn-success">Edit</a>
-                                <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger">Delete</a>
+                                <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger confirm">Delete</a>
                             </div>
                         </div>
                     </div>
@@ -76,19 +88,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.editBtn').click(function() {
-                var postId = $(this).parent().data('id');
-                $.get('/posts/' + postId, function(post) {
-                    $('#editTitle').val(post.title);
-                    $('#editContent').val(post.content);
-                    $('#editForm').attr('action', '/posts/' + post.id);
-                    $('#editModal').show();
-                });
-            });
+        $(document).ready(function($){
+            let confirmBtn = $('.confirm');
 
-            $('#editForm').submit(function() {
-                $('#editModal').hide();
+            confirmBtn.on('click', function(){
+                if (confirm("Are you sure you want to delete this post card?") == true) {
+                    return true;
+                }
+                return false;
             });
         });
     </script>

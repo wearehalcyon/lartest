@@ -1,3 +1,4 @@
+// Popup
 .edit-post-popup{
     position: fixed;
     display: none;
@@ -30,5 +31,16 @@
     }
     &.show{
         display: flex;
+    }
+}
+
+// Post card
+.card-body{
+    .card-text{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 }

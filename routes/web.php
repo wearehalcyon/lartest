@@ -29,11 +29,13 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth', 'session.timeout'])->group(function () {
+Route::prefix('/')->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+});
+
+Route::prefix('/')->group(function () {
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}', [PostController::class, 'edit'])->name('posts.edit');
     Route::post('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
     Route::get('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
-

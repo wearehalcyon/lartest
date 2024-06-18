@@ -13,7 +13,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
                 </li>
-                @if(!Auth::user())
+                @if(!Auth::check())
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
@@ -55,30 +55,32 @@
         </div>
     @endif
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-12 col-lg-5 col-xl-4">
-                <div class="card p-3">
-                    <h1>Create Post</h1>
-                    <form id="postForm" method="POST" action="{{ route('posts.store') }}">
-                        @csrf
-                        <div>
-                            <label>Title</label>
-                            <input class="form-control" type="text" name="title" required>
-                        </div>
-                        <div>
-                            <label>Content</label>
-                            <textarea class="form-control" name="content" required></textarea>
-                        </div>
-                        <button class="btn btn-primary mt-3" type="submit">Create Post</button>
-                    </form>
+    @if(Auth::check())
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-5 col-xl-4">
+                    <div class="card p-3">
+                        <h1>Create Post</h1>
+                        <form id="postForm" method="POST" action="{{ route('posts.store') }}">
+                            @csrf
+                            <div>
+                                <label>Title</label>
+                                <input class="form-control" type="text" name="title" required>
+                            </div>
+                            <div>
+                                <label>Content</label>
+                                <textarea class="form-control" name="content" required></textarea>
+                            </div>
+                            <button class="btn btn-primary mt-3" type="submit">Create Post</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     @if($posts->isNotEmpty())
-        <div class="container mt-5">
+        <div class="container mt-5 mb-5">
             <h2>Posts ({{ $posts->count() }})</h2>
             <div class="row">
                 @foreach($posts as $post)
@@ -88,12 +90,14 @@
                                 <p>{{ '#' . $post->id }}</p>
                                 <h5 class="card-title">{{ $post->title }}</h5>
                                 <p class="card-text">{{ $post->content }}</p>
+                                <a href="#" class="btn btn-primary view" data-id="{{ $post->id }}">View</a>
                                 <a href="#" class="btn btn-success edit" data-id="{{ $post->id }}" data-action="{{ route('posts.update', $post->id) }}">Edit</a>
                                 <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger confirm">Delete</a>
                             </div>
                         </div>
                     </div>
                 @endforeach
+                {{ $posts->links('pagination.posts') }}
             </div>
         </div>
     @endif
@@ -117,7 +121,7 @@
     <div class="edit-post-popup">
         <div class="card p-3 edit-post-window">
             <div class="close-popup">
-                <button class="btn-close" type="button">✕</button>
+                <button class="btn-close" type="button"></button>
             </div>
             <form id="postEditForm" method="POST" action="">
                 @csrf

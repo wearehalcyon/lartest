@@ -9,7 +9,7 @@ class SessionTimeout
 {
     public function handle($request, Closure $next)
     {
-        $timeout = 600; // 10 минут
+        $timeout = 600; // 10 minutes
 
         if (Auth::check()) {
             $lastActivity = $request->session()->get('last_activity_time');

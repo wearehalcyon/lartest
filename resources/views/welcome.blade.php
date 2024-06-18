@@ -16,7 +16,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
                 </li>
-                @if(!Auth::user())
+                @if(!Auth::check())
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>

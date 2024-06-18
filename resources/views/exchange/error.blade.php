@@ -11,8 +11,8 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-        <a class="navbar-brand" href="{{ url('/') }}">Home</a>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarText">
+        <a class="navbar-brand d-none d-lg-block" href="{{ url('/') }}">Home</a>
+        <div class="justify-content-between">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>

@@ -10,24 +10,24 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-        <a class="navbar-brand" href="{{ url('/') }}">Home</a>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarText">
+        <a class="navbar-brand d-none d-lg-block" href="{{ url('/') }}">Home</a>
+        <div class="justify-content-between">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('exchange.index') }}">Exchange Rates</a>
                 </li>
                 @if(!Auth::check())
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('register') }}">Register</a>
                     </li>
                 @else
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <button type="submit" class="nav-link" href="{{ route('logout') }}">Logout</button>
